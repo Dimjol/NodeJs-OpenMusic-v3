@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const ClientError = require('./ClientError');
 
 class AuthenticationError extends ClientError {

@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 const ClientError = require('../../exceptions/ClientError');
 const songs = require('../songs');

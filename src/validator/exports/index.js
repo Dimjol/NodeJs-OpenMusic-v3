@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const ExportSongsPlaylistPayloadSchema = require('./schema');
 const InvariantError = require('../../exceptions/InvariantError');
 

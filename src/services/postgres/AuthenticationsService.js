@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const { Pool } = require('pg');
 const InvariantError = require('../../exceptions/InvariantError');
 

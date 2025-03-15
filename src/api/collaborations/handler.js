@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 class CollaborationsHandler {
   constructor(collaborationsService, playlistsService, validator) {
     this._collaborationsService = collaborationsService;

@@ -1,13 +1,12 @@
-/* eslint-disable camelcase */
-
+/* eslint-disable linebreak-style */
 exports.up = (pgm) => {
-    pgm.addColumn("albums", {
-      coverUrl: {
-        type: "TEXT",
-      },
-    });
-  };
-  
-  exports.down = (pgm) => {
-    pgm.dropColumn("albums", "coverUrl");
-  };
+  pgm.addColumn('albums', {
+    coverUrl: {
+      type: 'TEXT',
+    },
+  });
+};
+
+exports.down = (pgm) => {
+  pgm.dropColumn('albums', 'coverUrl');
+};

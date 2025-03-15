@@ -1,4 +1,5 @@
-const AlbumHandler = require('./AlbumHandler');
+/* eslint-disable linebreak-style */
+const AlbumHandler = require('./handler');
 const routes = require('./routes');
 
 module.exports = {

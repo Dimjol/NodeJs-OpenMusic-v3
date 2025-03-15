@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const UploadsHandler = require('./handler');
 const routes = require('./routes');
 

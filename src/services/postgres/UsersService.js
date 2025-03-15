@@ -1,3 +1,6 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable no-undef */
+/* eslint-disable linebreak-style */
 const { nanoid } = require('nanoid');
 const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
@@ -25,6 +28,17 @@ class UsersService {
       throw new InvariantError('User gagal ditambahkan');
     }
     return result.rows[0].id;
+  }
+
+  async getUserById(userId) {
+    const query = {
+      text: 'SELECT id FROM users WHERE id = $1',
+      values: [userId]
+    };
+    const result = await this._pool.query(query);
+    if (!result.rowCount) {
+      throw new NotFoundError('User tidak ditemukan');
+    }
   }
 
   async verifyNewUsername(username) {

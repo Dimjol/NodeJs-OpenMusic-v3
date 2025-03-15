@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
 const InvariantError = require('../../exceptions/InvariantError');
@@ -90,15 +91,15 @@ class AlbumService {
     }
   }
 
-  async verifyAlbum(id) {
+  async verifyAlbum(albumId) {
     const query = {
-      text: 'SELECT * FROM albums WHERE id = $1',
-      values: [id],
+      text: 'SELECT id FROM albums WHERE id = $1',
+      values: [albumId],
     };
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
-      throw new NotFoundError('Album tidak ditemukan');
+    if (!result.rowCount) {
+      throw new NotFoundError('Album tidak ditemukan.');
     }
   }
 }

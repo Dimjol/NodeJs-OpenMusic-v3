@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const SongHandler = require('./handler');
 const routes = require('../songs/routes');
 

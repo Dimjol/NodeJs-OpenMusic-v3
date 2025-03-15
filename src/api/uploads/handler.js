@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable no-undef */
 const ClientError = require('../../exceptions/ClientError');
 

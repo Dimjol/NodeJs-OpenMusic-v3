@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
@@ -10,19 +11,28 @@ class AlbumLikesService {
   }
 
   async addAlbumLike(userId, albumId) {
-    const id = `album_likes-${nanoid(16)}`;
+    // Cek apakah user sudah memberi like ke album ini
+    const checkQuery = {
+      text: 'SELECT 1 FROM album_likes WHERE user_id = $1 AND album_id = $2',
+      values: [userId, albumId],
+    };
+
+    const checkResult = await this._pool.query(checkQuery);
+    if (checkResult.rowCount > 0) {
+      throw new InvariantError('Anda sudah memberikan like pada album ini.');
+    }
+
+    // Jika belum like, tambahkan ke database
+    const id = `like-${nanoid(16)}`;
     const query = {
-      text: 'INSERT INTO album_likes VALUES($1, $2, $3) RETURNING id',
-      values: [id, userId, albumId],
+      text: 'INSERT INTO album_likes VALUES ($1, $2, $3) RETURNING id',
+      values: [id, albumId, userId],
     };
 
     const result = await this._pool.query(query);
-
-    if (!result.rows[0].id) {
-      throw new InvariantError('Gagal memberikan like ke album');
+    if (!result.rowCount) {
+      throw new InvariantError('Gagal menambahkan like.');
     }
-
-    await this._cacheService.delete(`album_likes:${albumId}`);
     return result.rows[0].id;
   }
 

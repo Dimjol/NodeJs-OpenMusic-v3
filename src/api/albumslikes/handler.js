@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const ClientError = require('../../exceptions/ClientError');
 
 class AlbumLikesHandler {
@@ -14,47 +15,25 @@ class AlbumLikesHandler {
       const { albumId } = request.params;
       const { id: credentialId } = request.auth.credentials;
 
+      // Debugging
+      console.log('Album ID dari request:', albumId);
+      console.log('User ID:', credentialId);
+
+      // Pastikan album ada
       await this._albumService.verifyAlbum(albumId);
 
-      const getLiked = await this._service.verifyLikes(credentialId, albumId);
+      await this._service.addAlbumLike(credentialId, albumId);
 
-      if (!getLiked) {
-        const likeId = await this._service.addAlbumLike(credentialId, albumId);
-
-        const response = h.response({
-          status: 'success',
-          message: `Like pada album id: ${likeId}`,
-        });
-        response.code(201);
-        return response;
-      }
-
-      await this._service.deleteAlbumLike(credentialId, albumId);
-
-      const response = h.response({
+      return h.response({
         status: 'success',
-        message: 'Dislike berhasil',
-      });
-      response.code(201);
-      return response;
+        message: 'Like berhasil.',
+      }).code(201);
     } catch (error) {
-      if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
-      }
-
-      // Server ERROR!
-      const response = h.response({
-        status: 'error',
-        message: 'Maaf, terjadi kegagalan pada server kami.',
-      });
-      response.code(500);
       console.error(error);
-      return response;
+      return h.response({
+        status: 'fail',
+        message: error.message,
+      }).code(400);
     }
   }
 

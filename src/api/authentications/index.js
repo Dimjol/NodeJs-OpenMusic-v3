@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const AuthenticationsHandler = require('./handler');
 const routes = require('./routes');
 

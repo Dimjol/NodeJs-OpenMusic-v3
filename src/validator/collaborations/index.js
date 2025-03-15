@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const InvariantError = require('../../exceptions/InvariantError');
 const { CollaborationPayloadSchema } = require('./schema');
 

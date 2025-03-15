@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const fs = require('fs');
 
 class StorageService {
