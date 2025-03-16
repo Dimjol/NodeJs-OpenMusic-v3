@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
-/* eslint-disable no-dupe-class-members */
+
 const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
 const InvariantError = require('../../exceptions/InvariantError');
@@ -36,6 +36,16 @@ class AlbumLikesService {
       throw new InvariantError('Gagal menambahkan like.');
     }
     return result.rows[0].id;
+  }
+
+  async getAlbumLikesByAlbumId(albumId) {
+    const query = {
+      text: 'SELECT COUNT(*) FROM user_album_likes WHERE album_id = $1',
+      values: [albumId],
+    };
+
+    const result = await this._pool.query(query);
+    return parseInt(result.rows[0].count, 10);
   }
 
   async getLikesCount(albumId) {
@@ -85,10 +95,10 @@ class AlbumLikesService {
       text: 'SELECT * FROM album_likes WHERE user_id = $1 AND album_id = $2',
       values: [userId, albumId],
     };
-
     const result = await this._pool.query(query);
-
-    return result.rows.length;
+    if (result.rowCount > 0) {
+      return new InvariantError('Gagal menyukai album yang sama');
+    };
   }
 
   async verifyAlbumExists(albumId) {

@@ -5,7 +5,7 @@ const routes = (handler) => [
     path: '/playlists/{id}/activities',
     handler: handler.getPlaylistSongActivities,
     options: {
-      auth: 'openmusicapi_jwt',
+      auth: 'openmusicapp_jwt',
     },
   },
 ];

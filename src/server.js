@@ -55,15 +55,20 @@ const UploadsValidator = require('./validator/upload');
 
 // cache
 const CacheService = require('./services/cache/CacheService');
+const activities = require('./api/activities');
+
+//activities
+const ActivitiesService = require('./services/postgres/ActivitiesService');
+const activitiesService = new ActivitiesService();
 
 const init = async () => {
   const cacheService = new CacheService();
+  const collaborationsService = new CollaborationsService(cacheService);
+  const playlistsService = new PlaylistsService(collaborationsService);
   const albumService = new AlbumService(cacheService);
   const songService = new SongService();
   const usersService = new UsersService();
-  const playlistsService = new PlaylistsService();
   const playlistSongsService = new PlaylistSongsService(playlistsService);
-  const collaborationsService = new CollaborationsService(cacheService);
   const authenticationsService = new AuthenticationsService();
   const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/file/images'));
   const albumLikesService = new AlbumLikesService(cacheService);
@@ -89,7 +94,7 @@ const init = async () => {
   ]);
 
   // mendefinisikan strategy autentikasi jwt
-  server.auth.strategy('openmusicsapp_jwt', 'jwt', {
+  server.auth.strategy('openmusicapp_jwt', 'jwt', {
     keys: process.env.ACCESS_TOKEN_KEY,
     verify: {
       aud: false,
@@ -133,6 +138,7 @@ const init = async () => {
         playlistsService,
         playlistSongsService,
         songService,
+        activitiesService,
         validator: PlaylistsValidator,
       },
     },
@@ -177,6 +183,13 @@ const init = async () => {
         albumService,
       },
     },
+    {
+      plugin : activities,
+      options:{
+        service:{ playlistsService, activitiesService },
+        validator : activities,
+      }
+    }
   ]);
 
   await server.start();

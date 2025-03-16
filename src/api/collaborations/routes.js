@@ -5,7 +5,7 @@ const routes = (handler) => [
     path: '/collaborations',
     handler: handler.postCollaborationsHandler, // Pastikan handler ditetapkan
     options: {
-      auth: 'openmusicsapp_jwt', // Sesuaikan dengan strategi auth yang benar
+      auth: 'openmusicapp_jwt', // Sesuaikan dengan strategi auth yang benar
     },
   },
   {
@@ -13,7 +13,7 @@ const routes = (handler) => [
     path: '/collaborations',
     handler: handler.deleteCollaborationsHandler,
     options: {
-      auth: 'openmusicsapp_jwt',
+      auth: 'openmusicapp_jwt',
     },
   },
 ];

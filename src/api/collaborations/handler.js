@@ -2,9 +2,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable linebreak-style */
 class CollaborationsHandler {
-  constructor(collaborationsService, playlistsService, validator) {
+  constructor(collaborationsService, playlistsService, usersService, validator) {
     this.collaborationsService = collaborationsService;
     this.playlistsService = playlistsService;
+    this.usersService = usersService;
     this.validator = validator;
 
     this.postCollaborationsHandler = this.postCollaborationsHandler.bind(this);
@@ -14,7 +15,7 @@ class CollaborationsHandler {
   async postCollaborationsHandler(request, h) {
     this.validator.validateCollaborationPayload(request.payload);
     const { playlistId, userId } = request.payload;
-
+    await this.usersService.getUserById(userId);
     await this.playlistsService.verifyPlaylistOwner(playlistId, request.auth.credentials.id);
     const collaborationId = await this.collaborationsService.addCollaboration(playlistId, userId);
 

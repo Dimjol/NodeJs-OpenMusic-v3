@@ -10,13 +10,15 @@ class AlbumLikesHandler {
 
     this.postAlbumLikesHandler = this.postAlbumLikesHandler.bind(this);
     this.getAlbumLikesHandler = this.getAlbumLikesHandler.bind(this);
+    this.deleteAlbumLikesHandler = this.deleteAlbumLikesHandler.bind(this);
   }
 
   async postAlbumLikesHandler(request, h) {
     const { id: userId } = request.auth.credentials;
     const { id: albumId } = request.params;
 
-    await this._service.addAlbumLike(albumId, userId);
+    await this._albumService.getAlbumById(albumId);
+    await this._service.deleteAlbumLike(userId, albumId);
 
     const response = h.response({
       status: 'success',
@@ -26,16 +28,16 @@ class AlbumLikesHandler {
     return response;
   }
 
-  async deleteAlbumLikesHandler(request) {
-    const { id: userId } = request.auth.credentials;
-    const { id: albumId } = request.params;
+  async deleteAlbumLikesHandler(request, h) {
+    const { id } = request.params;
+    const { id: credentialId } = request.auth.credentials;
 
-    await this._service.deleteAlbumLike(albumId, userId);
+    await this._service.deleteAlbumLike(id, credentialId); // Pastikan method ini ada di AlbumLikesService
 
-    return {
+    return h.response({
       status: 'success',
-      message: 'Batal menyukai album',
-    };
+      message: 'Like dihapus',
+    }).code(200);
   }
 
   async getAlbumLikesHandler(request, h) {

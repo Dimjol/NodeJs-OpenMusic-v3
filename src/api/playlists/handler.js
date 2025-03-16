@@ -2,10 +2,11 @@
 const ClientError = require('../../exceptions/ClientError');
 
 class PlaylistsHandler {
-  constructor(playlistsService, playlistSongsService, songsService, validator) {
+  constructor(playlistsService, playlistSongsService, songsService, activitiesService, validator) {
     this._playlistsService = playlistsService;
     this._playlistSongsService = playlistSongsService;
     this._songsService = songsService;
+    this._activitiesService = activitiesService;
     this._validator = validator;
 
     this.postPlaylistByOwnerHandler = this.postPlaylistByOwnerHandler.bind(this);
@@ -131,15 +132,14 @@ class PlaylistsHandler {
   async postSongToPlaylistHandler(request, h) {
     try {
       this._validator.validatePostSongToPlaylistPayload(request.payload);
-
       const { songId } = request.payload;
       const { playlistId } = request.params;
       const { id: userId } = request.auth.credentials;
-
+      const action = 'add'; //pada deleteSongToPlaylist ganti action add menjadi delete
       await this._playlistsService.verifyPlaylistAccess(playlistId, userId);
-
       await this._songsService.verifySongExist(songId);
-      await this._playlistSongsService.addSongToPlaylist({ songId, playlistId, userId });
+      await this._playlistSongsService.addSongToPlaylist({ songId, playlistId });
+      await this._activitiesService.addActivity({ playlistId, songId, userId, action });
 
       const response = h.response({
         status: 'success',
