@@ -3,9 +3,9 @@ const routes = (handler) => [
   {
     method: 'POST',
     path: '/collaborations',
-    handler: handler.postCollaborationsHandler,
+    handler: handler.postCollaborationsHandler, // Pastikan handler ditetapkan
     options: {
-      auth: 'openmusicsapp_jwt',
+      auth: 'openmusicsapp_jwt', // Sesuaikan dengan strategi auth yang benar
     },
   },
   {

@@ -1,5 +1,7 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+/* eslint-disable no-dupe-class-members */
 const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
 const InvariantError = require('../../exceptions/InvariantError');
@@ -88,6 +90,20 @@ class AlbumLikesService {
 
     return result.rows.length;
   }
+
+  async verifyAlbumExists(albumId) {
+    const query = {
+      text: 'SELECT id FROM albums WHERE id = $1',
+      values: [albumId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (!result.rowCount) {
+      throw new NotFoundError('Album tidak ditemukan');
+    }
+  }
+
 }
 
 module.exports = AlbumLikesService;

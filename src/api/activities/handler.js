@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 class PlaylistSongActivitiesHandler {
   constructor(playlistsService, activitiesService) {
     this._playlistsService = playlistsService;

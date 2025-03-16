@@ -1,77 +1,55 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-unused-vars */
+/* eslint-disable linebreak-style */
 const ClientError = require('../../exceptions/ClientError');
 
 class AlbumLikesHandler {
-  constructor(service, albumService) {
+  constructor(service, validator) {
     this._service = service;
-    this._albumService = albumService;
+    this._validator = validator;
 
     this.postAlbumLikesHandler = this.postAlbumLikesHandler.bind(this);
     this.getAlbumLikesHandler = this.getAlbumLikesHandler.bind(this);
   }
 
   async postAlbumLikesHandler(request, h) {
-    try {
-      const { albumId } = request.params;
-      const { id: credentialId } = request.auth.credentials;
+    const { id: userId } = request.auth.credentials;
+    const { id: albumId } = request.params;
 
-      // Debugging
-      console.log('Album ID dari request:', albumId);
-      console.log('User ID:', credentialId);
+    await this._service.addAlbumLike(albumId, userId);
 
-      // Pastikan album ada
-      await this._albumService.verifyAlbum(albumId);
+    const response = h.response({
+      status: 'success',
+      message: 'Menyukai album',
+    });
+    response.code(201);
+    return response;
+  }
 
-      await this._service.addAlbumLike(credentialId, albumId);
+  async deleteAlbumLikesHandler(request) {
+    const { id: userId } = request.auth.credentials;
+    const { id: albumId } = request.params;
 
-      return h.response({
-        status: 'success',
-        message: 'Like berhasil.',
-      }).code(201);
-    } catch (error) {
-      console.error(error);
-      return h.response({
-        status: 'fail',
-        message: error.message,
-      }).code(400);
-    }
+    await this._service.deleteAlbumLike(albumId, userId);
+
+    return {
+      status: 'success',
+      message: 'Batal menyukai album',
+    };
   }
 
   async getAlbumLikesHandler(request, h) {
-    try {
-      const { albumId } = request.params;
+    const { id:albumId } = request.params;
 
-      const data = await this._service.getLikesCount(albumId);
-      const likes = data.count;
-
-      const response = h.response({
-        status: 'success',
-        data: {
-          likes,
-        },
-      });
-      response.header('X-Data-Source', data.source);
-      response.code(200);
-      return response;
-    } catch (error) {
-      if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
-      }
-
-      // Server ERROR!
-      const response = h.response({
-        status: 'error',
-        message: 'Maaf, terjadi kegagalan pada server kami.',
-      });
-      response.code(500);
-      console.error(error);
-      return response;
-    }
+    const { likes, headerValue } = await this._service.getAlbumLikesByAlbumId(albumId);
+    const response = h.response({
+      status: 'success',
+      data: {
+        likes,
+      },
+    });
+    response.header('X-Data-Source', headerValue);
+    return response;
   }
 }
 
