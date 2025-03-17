@@ -8,7 +8,7 @@ class AlbumsHandler {
     this.putAlbumByIdHandler = this.putAlbumByIdHandler.bind(this);
     this.deleteAlbumByIdHandler = this.deleteAlbumByIdHandler.bind(this);
     this.postLikeHandler = this.postLikeHandler.bind(this);
-    this.geLikeHandler = this.getLikeHandler.bind(this);
+    this.getLikeHandler = this.getLikeHandler.bind(this);
     this.deleteLikeHandler = this.deleteLikeHandler.bind(this);
   }
 
