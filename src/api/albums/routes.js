@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 const routes = (handler) => [
   {
     method: 'POST',
@@ -19,6 +18,27 @@ const routes = (handler) => [
     method: 'DELETE',
     path: '/albums/{id}',
     handler: handler.deleteAlbumByIdHandler,
+  },
+  {
+    method: 'POST',
+    path: '/albums/{id}/likes',
+    handler: handler.postLikeHandler,
+    options: {
+      auth: 'openmusicapi_jwt',
+    },
+  },
+  {
+    method: 'DELETE',
+    path: '/albums/{id}/likes',
+    handler: handler.deleteLikeHandler,
+    options: {
+      auth: 'openmusicapi_jwt',
+    },
+  },
+  {
+    method: 'GET',
+    path: '/albums/{id}/likes',
+    handler: handler.getLikeHandler,
   },
 ];
 

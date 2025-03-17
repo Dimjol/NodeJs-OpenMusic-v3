@@ -1,56 +1,40 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-undef */
-const ClientError = require('../../exceptions/ClientError');
-
-class UploadCoverHandler {
-  constructor(service, validator, albumService) {
+class UploadsHandler {
+  constructor(service, validator, albumsService) {
     this._service = service;
     this._validator = validator;
-    this._albumService = albumService;
+    this._albumsService = albumsService;
 
-    this.postUploadCoverHandler = this.postUploadCoverHandler.bind(this);
-
+    this.postUploadImageHandler = this.postUploadImageHandler.bind(this);
   }
 
-  async postUploadCoverHandler(request, h) {
-    try {
-      const { cover } = request.payload;
-      const { id } = request.params;
-
-      this._validator.validateCoverHeaders(cover.hapi.headers);
-
-      const filename = await this._service.writeFile(cover, cover.hapi);
-      const coverUrl = `http://${process.env.HOST}:${process.env.PORT}/upload/images/${filename}`;
-
-      await this._albumService.addCoverAlbumById(id, coverUrl);
+  async postUploadImageHandler(request, h) {
+    const { id: albumId } = request.params;
+    const { cover } = request.payload;
+    if (!cover || !cover.hapi) {
       const response = h.response({
-        status: 'success',
-        message: 'Cover berhasil ditambahkan',
-        data: {
-          fileLocation: `http://${process.env.HOST}:${process.env.PORT}/upload/images/${filename}`,
-        },
+        status: 'fail',
+        message: 'Gagal upload gambar',
       });
-      response.code(201);
-      return response;
-    } catch (error) {
-      if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
-      }
-      // Server ERROR!
-      const response = h.response({
-        status: 'error',
-        message: 'Maaf, terjadi kegagalan pada server kami.',
-      });
-      response.code(500);
-      console.error(error);
+      response.code(400);
       return response;
     }
+    this._validator.validateImageHeaders(cover.hapi.headers);
+
+    const filename = await this._service.writeFile(cover, cover.hapi);
+
+    const url = `http://${process.env.HOST}:${process.env.PORT}/upload/images/${filename}`;
+    await this._albumsService.editCoverAlbumById(albumId, url);
+
+    const response = h.response({
+      status: 'success',
+      message: 'Berhasil upload gambar',
+      cover: {
+        coverUrl: `http://${process.env.HOST}:${process.env.PORT}/upload/images/${filename}`,
+      },
+    });
+    response.code(201);
+    return response;
   }
 }
 
-module.exports = UploadCoverHandler;
+module.exports = UploadsHandler;

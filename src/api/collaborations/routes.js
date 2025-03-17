@@ -1,19 +1,18 @@
-/* eslint-disable linebreak-style */
 const routes = (handler) => [
   {
     method: 'POST',
     path: '/collaborations',
-    handler: handler.postCollaborationsHandler, // Pastikan handler ditetapkan
+    handler: handler.postCollaborationHandler,
     options: {
-      auth: 'openmusicapp_jwt', // Sesuaikan dengan strategi auth yang benar
+      auth: 'openmusicapi_jwt',
     },
   },
   {
     method: 'DELETE',
     path: '/collaborations',
-    handler: handler.deleteCollaborationsHandler,
+    handler: handler.deleteCollaborationHandler,
     options: {
-      auth: 'openmusicapp_jwt',
+      auth: 'openmusicapi_jwt',
     },
   },
 ];

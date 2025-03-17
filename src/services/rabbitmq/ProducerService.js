@@ -1,5 +1,3 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-undef */
 const amqp = require('amqplib');
 
 const ProducerService = {

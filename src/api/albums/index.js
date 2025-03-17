@@ -1,12 +1,11 @@
-/* eslint-disable linebreak-style */
-const AlbumHandler = require('./handler');
+const AlbumsHandler = require('./handler');
 const routes = require('./routes');
 
 module.exports = {
-  name: 'album-handler',
+  name: 'albums',
   version: '1.0.0',
   register: async (server, { service, validator }) => {
-    const albumhandler = new AlbumHandler(service, validator);
-    server.route(routes(albumhandler));
+    const albumsHandler = new AlbumsHandler(service, validator);
+    server.route(routes(albumsHandler));
   },
 };

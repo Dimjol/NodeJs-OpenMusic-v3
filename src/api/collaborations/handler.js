@@ -1,44 +1,49 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-unused-vars */
-/* eslint-disable linebreak-style */
 class CollaborationsHandler {
   constructor(collaborationsService, playlistsService, usersService, validator) {
-    this.collaborationsService = collaborationsService;
-    this.playlistsService = playlistsService;
-    this.usersService = usersService;
-    this.validator = validator;
+    this._collaborationsService = collaborationsService;
+    this._playlistsService = playlistsService;
+    this._usersService = usersService;
+    this._validator = validator;
 
-    this.postCollaborationsHandler = this.postCollaborationsHandler.bind(this);
-    this.deleteCollaborationsHandler = this.deleteCollaborationsHandler.bind(this);
+    this.postCollaborationHandler = this.postCollaborationHandler.bind(this);
+    this.deleteCollaborationHandler = this.deleteCollaborationHandler.bind(this);
   }
 
-  async postCollaborationsHandler(request, h) {
-    this.validator.validateCollaborationPayload(request.payload);
+  async postCollaborationHandler(request, h) {
+    this._validator.validateCollaborationPayload(request.payload);
+    const { id: credentialId } = request.auth.credentials;
     const { playlistId, userId } = request.payload;
-    await this.usersService.getUserById(userId);
-    await this.playlistsService.verifyPlaylistOwner(playlistId, request.auth.credentials.id);
-    const collaborationId = await this.collaborationsService.addCollaboration(playlistId, userId);
+
+    await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
+    await this._usersService.getUserById(userId);
+    const collaborationId = await this._collaborationsService.addCollaboration(playlistId, userId);
 
     const response = h.response({
       status: 'success',
-      message: 'Kolaborasi berhasil ditambahkan',
-      data: { collaborationId },
+      message: 'Berhasil menambahkan kolaborasi',
+      data: {
+        collaborationId,
+      },
     });
     response.code(201);
     return response;
   }
 
-  async deleteCollaborationsHandler(request, h) {
-    this.validator.validateCollaborationPayload(request.payload);
+  async deleteCollaborationHandler(request, h) {
+    this._validator.validateCollaborationPayload(request.payload);
+    const { id: credentialId } = request.auth.credentials;
     const { playlistId, userId } = request.payload;
 
-    await this.playlistsService.verifyPlaylistOwner(playlistId, request.auth.credentials.id);
-    await this.collaborationsService.deleteCollaboration(playlistId, userId);
+    await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
+    await this._collaborationsService.deleteCollaboration(playlistId, userId);
 
-    return {
+    const response = h.response({
       status: 'success',
-      message: 'Kolaborasi berhasil dihapus',
-    };
+      message: 'Berhasil menghapus kolaborasi',
+    });
+
+    response.code(200);
+    return response;
   }
 }
 

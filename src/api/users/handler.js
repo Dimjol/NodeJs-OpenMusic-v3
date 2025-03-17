@@ -1,7 +1,4 @@
-/* eslint-disable linebreak-style */
-const ClientError = require('../../exceptions/ClientError');
-
-class UsersHandler {
+class UserHandler {
   constructor(service, validator) {
     this._service = service;
     this._validator = validator;
@@ -10,42 +7,24 @@ class UsersHandler {
   }
 
   async postUserHandler(request, h) {
-    try {
-      this._validator.validateUserPayload(request.payload);
-      const { username, password, fullname } = request.payload;
-      const userId = await this._service.addUser({ username, password, fullname });
+    this._validator.validateUserPayload(request.payload);
+    const { username, password, fullname } = request.payload;
 
-      const response = h.response({
-        status: 'success',
-        message: 'User berhasil ditambahkan',
-        data: {
-          userId,
-        },
-      });
-      response.code(201);
-      return response;
+    const userId = await this._service.addUser({
+      username, password, fullname,
+    });
 
-    } catch (error) {
-      if (error instanceof ClientError) {
-        const response = h.response({
-          status: 'fail',
-          message: error.message,
-        });
-        response.code(error.statusCode);
-        return response;
-      }
+    const response = h.response({
+      status: 'success',
+      message: 'Berhasil menambahkan user',
+      data: {
+        userId,
+      },
+    });
 
-      // Server ERROR!
-      const response = h.response({
-        status: 'error',
-        message: 'Maaf, terjadi kegagalan pada server kami.',
-      });
-      response.code(500);
-      console.error(error);
-      return response;
-
-    }
+    response.code(201);
+    return response;
   }
 }
 
-module.exports = UsersHandler;
+module.exports = UserHandler;

@@ -1,12 +1,10 @@
-/* eslint-disable linebreak-style */
-/* eslint-disable no-undef */
 const path = require('path');
 
 const routes = (handler) => [
   {
     method: 'POST',
     path: '/albums/{id}/covers',
-    handler: handler.postUploadCoverHandler,
+    handler: handler.postUploadImageHandler,
     options: {
       payload: {
         allow: 'multipart/form-data',

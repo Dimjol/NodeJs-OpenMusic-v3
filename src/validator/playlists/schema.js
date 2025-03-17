@@ -1,20 +1,11 @@
-/* eslint-disable linebreak-style */
 const Joi = require('joi');
 
-const PostPlaylistPayloadSchema = Joi.object({
+const PlaylistPayloadSchema = Joi.object({
   name: Joi.string().required(),
 });
 
-const PostSongToPlaylistPayloadSchema = Joi.object({
+const PlaylistSongPayloadSchema = Joi.object({
   songId: Joi.string().required(),
 });
 
-const DeleteSongFromPlaylistPayloadSchema = Joi.object({
-  songId: Joi.string().required(),
-});
-
-module.exports = {
-  PostPlaylistPayloadSchema,
-  PostSongToPlaylistPayloadSchema,
-  DeleteSongFromPlaylistPayloadSchema,
-};
+module.exports = { PlaylistPayloadSchema, PlaylistSongPayloadSchema };

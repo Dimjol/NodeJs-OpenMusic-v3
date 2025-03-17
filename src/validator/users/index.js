@@ -1,8 +1,7 @@
-/* eslint-disable linebreak-style */
 const InvariantError = require('../../exceptions/InvariantError');
 const { UserPayloadSchema } = require('./schema');
 
-const UsersValidator = {
+const UserValidator = {
   validateUserPayload: (payload) => {
     const validationResult = UserPayloadSchema.validate(payload);
 
@@ -12,4 +11,4 @@ const UsersValidator = {
   },
 };
 
-module.exports = UsersValidator;
+module.exports = UserValidator;

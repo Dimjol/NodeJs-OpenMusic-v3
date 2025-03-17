@@ -1,1 +1,1 @@
-﻿# NodeJs-OpenMusic
+# openmusic-api

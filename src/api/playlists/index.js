@@ -1,4 +1,3 @@
-/* eslint-disable linebreak-style */
 const PlaylistsHandler = require('./handler');
 const routes = require('./routes');
 
@@ -7,17 +6,15 @@ module.exports = {
   version: '1.0.0',
   register: async (server, {
     playlistsService,
-    playlistSongsService,
-    songService,
+    songsService,
     activitiesService,
-    validator
+    validator,
   }) => {
     const playlistsHandler = new PlaylistsHandler(
       playlistsService,
-      playlistSongsService,
-      songService,
+      songsService,
       activitiesService,
-      validator
+      validator,
     );
     server.route(routes(playlistsHandler));
   },

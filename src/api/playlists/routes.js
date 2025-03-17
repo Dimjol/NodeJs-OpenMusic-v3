@@ -1,51 +1,50 @@
-/* eslint-disable linebreak-style */
 const routes = (handler) => [
   {
     method: 'POST',
     path: '/playlists',
-    handler: handler.postPlaylistByOwnerHandler,
+    handler: handler.postPlaylistHandler,
     options: {
-      auth: 'openmusicapp_jwt',
+      auth: 'openmusicapi_jwt',
     },
   },
   {
     method: 'GET',
     path: '/playlists',
-    handler: handler.getPlaylistByOwnerHandler,
+    handler: handler.getPlaylistsHandler,
     options: {
-      auth: 'openmusicapp_jwt',
+      auth: 'openmusicapi_jwt',
     },
   },
   {
     method: 'DELETE',
     path: '/playlists/{id}',
-    handler: handler.deletePlaylistByOwnerHandler,
+    handler: handler.deletePlaylistByIdHandler,
     options: {
-      auth: 'openmusicapp_jwt',
+      auth: 'openmusicapi_jwt',
     },
   },
   {
     method: 'POST',
-    path: '/playlists/{playlistId}/songs',
+    path: '/playlists/{id}/songs',
     handler: handler.postSongToPlaylistHandler,
     options: {
-      auth: 'openmusicapp_jwt',
+      auth: 'openmusicapi_jwt',
     },
   },
   {
     method: 'GET',
-    path: '/playlists/{playlistId}/songs',
-    handler: handler.getSongInPlaylistHandler,
+    path: '/playlists/{id}/songs',
+    handler: handler.getSongInPlaylistByIdHandler,
     options: {
-      auth: 'openmusicapp_jwt',
+      auth: 'openmusicapi_jwt',
     },
   },
   {
     method: 'DELETE',
-    path: '/playlists/{playlistId}/songs',
-    handler: handler.deleteSongInPlaylistHandler,
+    path: '/playlists/{id}/songs',
+    handler: handler.deleteSongFromPlaylistHandler,
     options: {
-      auth: 'openmusicapp_jwt',
+      auth: 'openmusicapi_jwt',
     },
   },
 ];
